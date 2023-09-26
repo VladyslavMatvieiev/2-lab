@@ -1,0 +1,58 @@
+from random import randint
+
+def fill_array_with_random_numbers(size):
+    return [randint(1, 9) for _ in range(size)]
+
+def add_arrays(arr1, arr2):
+    max_size = max(len(arr1), len(arr2))
+    arr1 = [0] * (max_size - len(arr1)) + arr1
+    arr2 = [0] * (max_size - len(arr2)) + arr2
+    carry = 0
+    result = []
+
+    for i in range(max_size - 1, -1, -1):
+        total = arr1[i] + arr2[i] + carry
+        carry = total // 10
+        result.insert(0, total % 10)
+
+    if carry:
+        result.insert(0, carry)
+
+    return result
+
+def subtract_arrays(arr1, arr2):
+    result = []
+    borrow = 0
+
+    for i in range(len(arr1) - 1, -1, -1):
+        diff = arr1[i] - borrow
+        if i < len(arr2):
+            diff -= arr2[i]
+        borrow = 0
+
+        if diff < 0:
+            diff += 10
+            borrow = 1
+
+        result.insert(0, diff)
+
+    while result[0] == 0 and len(result) > 1:
+        result.pop(0)
+
+    return result
+
+first_arr_size = int(input("Введите размер первого массива: "))
+second_arr_size = int(input("Введите размер второго массива: "))
+operation = input("Введите операцию + или - : ")
+
+first_array = fill_array_with_random_numbers(first_arr_size)
+second_array = fill_array_with_random_numbers(second_arr_size)
+
+if operation == "+":
+    result_array = add_arrays(first_array, second_array)
+elif operation == "-":
+    result_array = subtract_arrays(first_array, second_array)
+
+print(f"Первый массив: {first_array}")
+print(f"Второй массив: {second_array}")
+print(f"\nРезультат: {result_array}")
